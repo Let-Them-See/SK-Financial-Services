@@ -9,14 +9,22 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'primary-navy': '#002244',
-        'gold': '#FFD700',
-        'light-gray': '#F5F5F5',
-        'dark-navy': '#001122',
+        navy: {
+          DEFAULT: '#002244',
+          dark: '#001122',
+        },
+        gold: '#FFD700',
+        light: {
+          gray: '#F5F5F5',
+        }
       },
       fontFamily: {
-        'inter': ['Inter', 'sans-serif'],
-        'playfair': ['Playfair Display', 'serif'],
+        sans: ['var(--font-inter)'],
+        serif: ['var(--font-playfair)'],
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
   },
