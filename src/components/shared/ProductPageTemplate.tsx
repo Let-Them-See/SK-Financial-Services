@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { ChevronRight, Check } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 
 export interface ProductData {
     title: string
@@ -27,27 +29,27 @@ export default function ProductPageTemplate({ data }: { data: ProductData }) {
     }
 
     return (
-        <div className="bg-white min-h-screen">
+        <div className="bg-background min-h-screen">
             {/* 1. Hero Banner */}
-            <section className="relative bg-navy py-16 lg:py-24 overflow-hidden pt-28">
-                <div className="absolute top-1/2 left-1/2 -transparent-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
+            <section className="bg-primary py-24 lg:py-32 pt-36 relative overflow-hidden">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="container relative z-10 mx-auto px-6 max-w-7xl text-center flex flex-col items-center">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="flex items-center gap-2 text-xs font-bold text-white/50 uppercase tracking-widest mb-6"
+                        className="flex items-center gap-2 text-xs font-semibold text-primary-foreground/60 uppercase tracking-widest mb-6"
                     >
-                        <Link href="/" className="hover:text-gold transition-colors">Home</Link>
-                        <ChevronRight className="w-3 h-3 text-gold" />
-                        <span className="text-gold">Products</span>
-                        <ChevronRight className="w-3 h-3 text-gold" />
-                        <span className="text-white">{data.title}</span>
+                        <Link href="/" className="hover:text-accent transition-colors">Home</Link>
+                        <ChevronRight className="w-3 h-3 text-accent" />
+                        <span className="text-accent">Products</span>
+                        <ChevronRight className="w-3 h-3 text-accent" />
+                        <span className="text-primary-foreground">{data.title}</span>
                     </motion.div>
 
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-white mb-6"
+                        className="font-serif text-4xl font-bold leading-tight text-primary-foreground md:text-5xl lg:text-7xl text-balance max-w-4xl mb-6"
                     >
                         {data.title}
                     </motion.h1>
@@ -56,7 +58,7 @@ export default function ProductPageTemplate({ data }: { data: ProductData }) {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-white/80 text-xl font-medium max-w-2xl mb-10"
+                        className="text-primary-foreground/80 text-lg md:text-xl font-medium max-w-2xl mb-12 text-balance leading-relaxed"
                     >
                         {data.tagline}
                     </motion.p>
@@ -66,32 +68,35 @@ export default function ProductPageTemplate({ data }: { data: ProductData }) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
                     >
-                        <Link
-                            href="/contact-us"
-                            className="bg-gold text-navy px-10 py-5 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(255,215,0,0.2)] hover:shadow-[0_0_30px_rgba(255,215,0,0.4)] hover:bg-yellow-400 transition-all duration-300 transform hover:-translate-y-1"
+                        <Button
+                            asChild
+                            size="lg"
+                            className="bg-accent text-accent-foreground px-10 h-14 rounded-full font-bold text-lg hover:bg-accent/90 transition-all shadow-md"
                         >
-                            Start Investing Today
-                        </Link>
+                            <Link href="/contact-us">
+                                Start Investing Today
+                            </Link>
+                        </Button>
                     </motion.div>
                 </div>
             </section>
 
             {/* 2. What Is It? */}
-            <section className="py-20 lg:py-24 bg-white">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <section className="py-24 bg-background">
+                <div className="container mx-auto px-6 max-w-7xl">
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            className="relative aspect-[4/3] bg-light-gray rounded-[2rem] overflow-hidden shadow-2xl flex items-center justify-center p-8 border border-gray-100"
+                            className="relative aspect-video bg-muted rounded-3xl overflow-hidden border border-border flex items-center justify-center p-8"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-tr from-navy/5 to-transparent"></div>
+                            <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent"></div>
                             <div className="text-center">
-                                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-lg mx-auto mb-6">
-                                    <span className="text-4xl font-playfair font-bold text-navy">{data.title.charAt(0)}</span>
+                                <div className="w-24 h-24 bg-card rounded-2xl flex items-center justify-center shadow-sm mx-auto mb-6 border border-border">
+                                    <span className="text-4xl font-serif font-bold text-primary">{data.title.charAt(0)}</span>
                                 </div>
-                                <span className="text-navy font-bold tracking-widest uppercase text-sm opacity-50">{data.title}</span>
+                                <span className="text-primary font-bold tracking-widest uppercase text-sm opacity-60">{data.title}</span>
                             </div>
                         </motion.div>
 
@@ -100,17 +105,16 @@ export default function ProductPageTemplate({ data }: { data: ProductData }) {
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                         >
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="w-12 h-1 bg-gold rounded-full"></div>
-                                <span className="text-gold font-bold uppercase tracking-widest text-sm">Overview</span>
-                            </div>
-                            <h2 className="text-3xl lg:text-4xl font-playfair font-bold text-navy mb-8">
-                                What is {data.title}?
+                            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
+                                Overview
+                            </p>
+                            <h2 className="font-serif text-3xl font-bold text-foreground mb-6 text-balance">
+                                What are {data.title}?
                             </h2>
-                            <div className="space-y-6">
-                                {data.whatIsIt.map((p, idx) => (
-                                    <p key={idx} className="text-gray-600 leading-relaxed text-lg">
-                                        {p}
+                            <div className="space-y-4">
+                                {data.whatIsIt.map((paragraph, idx) => (
+                                    <p key={idx} className="text-muted-foreground leading-relaxed text-lg text-balance">
+                                        {paragraph}
                                     </p>
                                 ))}
                             </div>
@@ -119,165 +123,127 @@ export default function ProductPageTemplate({ data }: { data: ProductData }) {
                 </div>
             </section>
 
-            {/* 3. Key Highlights */}
-            <section className="py-20 lg:py-24 bg-light-gray">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl lg:text-4xl font-playfair font-bold text-navy mb-4">Key Highlights</h2>
-                        <div className="w-16 h-1 bg-gold mx-auto rounded-full"></div>
+            {/* 3. Metrics / Rating */}
+            <section className="bg-primary/5 py-16 border-y border-border">
+                <div className="container mx-auto px-6 max-w-7xl">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 divide-x divide-border">
+                        <div className="text-center px-4">
+                            <span className="block text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Category</span>
+                            <span className="font-bold text-primary font-serif text-xl">{data.title}</span>
+                        </div>
+                        <div className="text-center px-4">
+                            <span className="block text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Risk Level</span>
+                            <div className="flex justify-center gap-1">
+                                {[1, 2, 3, 4, 5].map(star => (
+                                    <div key={star} className={`w-3 md:w-4 h-3 md:h-4 rounded-full ${star <= data.riskLevel ? 'bg-destructive' : 'bg-destructive/20'}`}></div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="text-center px-4">
+                            <span className="block text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Return Potential</span>
+                            <div className="flex justify-center gap-1">
+                                {[1, 2, 3, 4, 5].map(star => (
+                                    <div key={star} className={`w-3 md:w-4 h-3 md:h-4 rounded-full hover:scale-110 transition-transform ${star <= data.returnPotential ? 'bg-[hsl(142.1,76.2%,36.3%)]' : 'bg-[hsl(142.1,76.2%,36.3%)]/20'}`}></div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="text-center px-4">
+                            <span className="block text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Consultation</span>
+                            <span className="font-bold text-accent font-serif text-xl">Available</span>
+                        </div>
                     </div>
+                </div>
+            </section>
 
+            {/* 4. Highlights Grid */}
+            <section className="py-24 bg-background">
+                <div className="container mx-auto px-6 max-w-7xl">
+                    <div className="text-center mb-16">
+                        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
+                            Important Details
+                        </p>
+                        <h2 className="font-serif text-3xl font-bold text-foreground">Key Highlights</h2>
+                    </div>
                     <motion.div
                         variants={container}
                         initial="hidden"
                         whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+                        viewport={{ once: true }}
+                        className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
                     >
                         {data.highlights.map((highlight, idx) => (
-                            <motion.div
-                                key={idx}
-                                variants={item}
-                                className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-gold/50 group flex flex-col items-center text-center"
-                            >
-                                <div className="w-14 h-14 bg-navy/5 rounded-full flex items-center justify-center mb-6 group-hover:bg-gold transition-colors">
-                                    <highlight.icon className="w-6 h-6 text-navy" />
-                                </div>
-                                <h3 className="text-lg font-bold text-navy mb-3 font-playfair">{highlight.title}</h3>
-                                <p className="text-gray-600 text-sm leading-relaxed">{highlight.desc}</p>
+                            <motion.div key={idx} variants={item}>
+                                <Card className="bg-card border-border h-full shadow-sm hover:border-accent/30 transition-colors">
+                                    <CardHeader className="flex flex-row items-center gap-4 space-y-0">
+                                        <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
+                                            <highlight.icon className="w-6 h-6 text-primary" />
+                                        </div>
+                                        <CardTitle className="font-serif text-lg m-0">{highlight.title}</CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <CardDescription className="text-base text-muted-foreground">
+                                            {highlight.desc}
+                                        </CardDescription>
+                                    </CardContent>
+                                </Card>
                             </motion.div>
                         ))}
                     </motion.div>
                 </div>
             </section>
 
-            {/* 4. Risk / Return Profile & Who Should Invest */}
-            <section className="py-20 lg:py-24 bg-navy text-white relative">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            {/* 5. Benefits & Target Audience */}
+            <section className="py-24 bg-primary text-primary-foreground border-y border-primary-foreground/10">
+                <div className="container mx-auto px-6 max-w-7xl">
                     <div className="grid lg:grid-cols-2 gap-16">
 
-                        {/* Risk-Return Meter */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            className="bg-white/5 backdrop-blur-md p-10 rounded-3xl border border-white/10"
-                        >
-                            <h3 className="text-2xl font-playfair font-bold text-white mb-10">Risk vs. Return Profile</h3>
-
-                            <div className="space-y-12">
-                                {/* Risk Bar */}
-                                <div>
-                                    <div className="flex justify-between mb-3 text-sm font-bold tracking-widest uppercase">
-                                        <span className="text-white/70">Risk Level</span>
-                                        <span className="text-gold">{data.riskLevel} / 5</span>
+                        {/* Benefits list */}
+                        <div>
+                            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
+                                The Advantage
+                            </p>
+                            <h2 className="font-serif text-3xl font-bold text-primary-foreground mb-8">Benefits of {data.title}</h2>
+                            <div className="space-y-6">
+                                {data.benefits.map((benefit, idx) => (
+                                    <div key={idx} className="flex items-start gap-4">
+                                        <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center shrink-0 shadow-sm mt-1">
+                                            <benefit.icon className="w-5 h-5" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-lg font-serif mb-1">{benefit.title}</h3>
+                                            <p className="text-primary-foreground/70 leading-relaxed text-sm">{benefit.desc}</p>
+                                        </div>
                                     </div>
-                                    <div className="flex gap-2">
-                                        {[1, 2, 3, 4, 5].map(level => (
-                                            <div
-                                                key={level}
-                                                className={`h-4 flex-1 rounded-full ${level <= data.riskLevel ? 'bg-gold shadow-[0_0_10px_rgba(255,215,0,0.5)]' : 'bg-white/10'}`}
-                                            ></div>
-                                        ))}
-                                    </div>
-                                    <div className="flex justify-between mt-2 text-xs text-white/40 font-bold uppercase">
-                                        <span>Low</span>
-                                        <span>High</span>
-                                    </div>
-                                </div>
-
-                                {/* Return Bar */}
-                                <div>
-                                    <div className="flex justify-between mb-3 text-sm font-bold tracking-widest uppercase">
-                                        <span className="text-white/70">Return Potential</span>
-                                        <span className="text-gold">{data.returnPotential} / 5</span>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        {[1, 2, 3, 4, 5].map(level => (
-                                            <div
-                                                key={level}
-                                                className={`h-4 flex-1 rounded-full ${level <= data.returnPotential ? 'bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]' : 'bg-white/10'}`}
-                                            ></div>
-                                        ))}
-                                    </div>
-                                    <div className="flex justify-between mt-2 text-xs text-white/40 font-bold uppercase">
-                                        <span>Conservative</span>
-                                        <span>Aggressive</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        {/* Who Should Invest */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2 }}
-                            className="flex flex-col justify-center"
-                        >
-                            <h3 className="text-3xl lg:text-4xl font-playfair font-bold text-white mb-8">Who Should Invest?</h3>
-                            <div className="flex flex-wrap gap-4">
-                                {data.whoShouldInvest.map((tag, idx) => (
-                                    <span
-                                        key={idx}
-                                        className="bg-white/10 text-white px-6 py-3 rounded-full font-bold text-sm border border-white/20 shadow-lg"
-                                    >
-                                        {tag}
-                                    </span>
                                 ))}
                             </div>
-                            <p className="mt-8 text-white/70 leading-relaxed text-lg">
-                                If your investor profile matches these characteristics, {data.title} could be a vital component of your overall portfolio strategy.
-                            </p>
-                        </motion.div>
+                        </div>
+
+                        {/* Who should invest */}
+                        <div className="bg-primary-foreground/5 rounded-3xl p-10 border border-primary-foreground/10 h-fit">
+                            <h2 className="font-serif text-2xl font-bold text-primary-foreground mb-8 border-b border-primary-foreground/10 pb-4">Who should invest?</h2>
+                            <ul className="space-y-4">
+                                {data.whoShouldInvest.map((point, idx) => (
+                                    <li key={idx} className="flex items-start gap-3">
+                                        <Check className="w-5 h-5 text-accent shrink-0 mt-0.5" />
+                                        <span className="text-primary-foreground/80 leading-relaxed">{point}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div className="mt-10 pt-6 border-t border-primary-foreground/10 text-center">
+                                <p className="text-sm font-semibold text-primary-foreground/70 mb-4">Does this sound like you?</p>
+                                <Button
+                                    asChild
+                                    variant="outline"
+                                    className="border-accent text-accent hover:bg-accent hover:text-accent-foreground rounded-full h-12 px-8 w-full"
+                                >
+                                    <Link href="/contact-us">
+                                        Speak to an Advisor
+                                    </Link>
+                                </Button>
+                            </div>
+                        </div>
 
                     </div>
-                </div>
-            </section>
-
-            {/* 5. Direct Benefits */}
-            <section className="py-20 lg:py-24 bg-white">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl lg:text-4xl font-playfair font-bold text-navy mb-4">Core Benefits</h2>
-                        <div className="w-16 h-1 bg-gold mx-auto rounded-full"></div>
-                    </div>
-                    <div className="max-w-4xl mx-auto space-y-6">
-                        {data.benefits.map((benefit, idx) => (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, x: idx % 2 === 0 ? -30 : 30 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                className="flex items-start gap-6 bg-light-gray p-8 rounded-2xl border border-gray-100"
-                            >
-                                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm text-gold">
-                                    <Check className="w-6 h-6" />
-                                </div>
-                                <div>
-                                    <h4 className="text-xl font-bold font-playfair text-navy mb-2">{benefit.title}</h4>
-                                    <p className="text-gray-600 leading-relaxed">{benefit.desc}</p>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* 6. CTA Footer */}
-            <section className="py-20 bg-gold text-navy text-center relative overflow-hidden">
-                <div className="container mx-auto px-4 relative z-10">
-                    <h2 className="text-4xl font-playfair font-bold mb-6">Want to know more about {data.title}?</h2>
-                    <p className="text-xl font-medium mb-10 opacity-80 max-w-2xl mx-auto">
-                        Get in touch with our experts to discuss how this product fits into your wealth management strategy.
-                    </p>
-                    <Link
-                        href="/contact-us"
-                        className="inline-block bg-navy text-white px-12 py-5 rounded-full font-bold text-lg shadow-2xl hover:bg-navy-dark hover:-translate-y-1 transition-all duration-300"
-                    >
-                        Contact Advisor
-                    </Link>
                 </div>
             </section>
         </div>
