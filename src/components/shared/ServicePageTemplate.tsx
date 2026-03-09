@@ -1,10 +1,21 @@
-'use client'
+﻿'use client'
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { ChevronRight, CheckCircle2, ArrowRight } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { useState } from 'react'
+import PageNavigation from '@/components/shared/PageNavigation'
+import PageHero from '@/components/shared/PageHero'
+import PageFooter from '@/components/shared/PageFooter'
+import CTABanner from '@/components/homepage/CTABanner'
+
+const NAV_C = '#073358'
+const GOLD = '#FFD716'
+const EMERALD = '#0DA574'
+const LIGHT = '#F4F7FA'
+const BODY = '#4A6080'
+const WHITE = '#FFFFFF'
+const MIDNIGHT = '#001F3E'
 
 export interface ServiceData {
     title: string
@@ -15,235 +26,219 @@ export interface ServiceData {
     relatedServices: { name: string; href: string }[]
 }
 
-export default function ServicePageTemplate({ data }: { data: ServiceData }) {
-    const staggerContainer = {
-        hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
-    }
-
-    const staggerItem = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-    }
-
+function FeatureCard({ feature }: { feature: { title: string; desc: string; icon: any } }) {
+    const [hov, setHov] = useState(false)
     return (
-        <div className="bg-background min-h-screen">
-            {/* 1. Top Hero Banner */}
-            <section className="bg-primary py-20 lg:py-28 pt-32">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="flex items-center gap-2 text-xs font-semibold text-primary-foreground/60 uppercase tracking-widest mb-6"
-                    >
-                        <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-                        <ChevronRight className="w-3 h-3 text-accent" />
-                        <span className="text-accent">Services</span>
-                        <ChevronRight className="w-3 h-3 text-accent" />
-                        <span className="text-primary-foreground">{data.title}</span>
-                    </motion.div>
+        <div
+            onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+            style={{ background: WHITE, border: `1px solid ${hov ? `${GOLD}70` : 'rgba(7,51,88,0.1)'}`, borderRadius: 20, padding: '32px 28px', height: '100%', transition: 'all 0.25s', boxShadow: hov ? '0 12px 40px rgba(7,51,88,0.12)' : '0 2px 8px rgba(7,51,88,0.04)', transform: hov ? 'translateY(-3px)' : 'none' }}
+        >
+            <div style={{ width: 52, height: 52, borderRadius: 14, background: hov ? `${GOLD}25` : `${NAV_C}08`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20, transition: 'background 0.25s' }}>
+                <feature.icon style={{ width: 26, height: 26, color: hov ? NAV_C : NAV_C }} />
+            </div>
+            <h3 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 22, fontWeight: 700, color: NAV_C, marginBottom: 12 }}>{feature.title}</h3>
+            <p style={{ color: BODY, fontSize: 15, lineHeight: 1.75 }}>{feature.desc}</p>
+        </div>
+    )
+}
 
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="font-serif text-4xl font-bold leading-tight text-primary-foreground md:text-5xl lg:text-6xl text-balance max-w-4xl"
-                    >
-                        {data.title}
-                    </motion.h1>
-                </div>
-            </section>
+function WhyCard({ reason, delay }: { reason: { title: string; desc: string; icon: any }; delay: number }) {
+    const [hov, setHov] = useState(false)
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay }}
+            onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+            style={{ background: hov ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.04)', padding: '36px 32px', borderRadius: 20, border: `1px solid ${hov ? `${GOLD}40` : 'rgba(255,255,255,0.08)'}`, transition: 'all 0.25s', cursor: 'default' }}
+        >
+            <CheckCircle2 style={{ width: 32, height: 32, color: GOLD, marginBottom: 16 }} />
+            <h3 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 22, fontWeight: 700, color: WHITE, marginBottom: 12 }}>{reason.title}</h3>
+            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 14, lineHeight: 1.8 }}>{reason.desc}</p>
+        </motion.div>
+    )
+}
 
-            {/* 2. Introduction Section */}
-            <section className="py-24 bg-background border-b border-border">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="grid lg:grid-cols-2 gap-16 items-center">
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="space-y-6"
-                        >
-                            <h2 className="font-serif text-3xl font-bold text-foreground mb-6 text-balance">
-                                Understanding {data.title}
+function RelatedCard({ service }: { service: { name: string; href: string } }) {
+    const [hov, setHov] = useState(false)
+    return (
+        <Link
+            href={service.href}
+            onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: hov ? `${GOLD}08` : WHITE, padding: '24px 28px', borderRadius: 16, boxShadow: hov ? '0 8px 32px rgba(7,51,88,0.1)' : '0 2px 8px rgba(7,51,88,0.05)', border: `1px solid ${hov ? GOLD : 'rgba(7,51,88,0.1)'}`, transition: 'all 0.25s', textDecoration: 'none' }}
+        >
+            <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: 20, fontWeight: 700, color: NAV_C }}>{service.name}</span>
+            <div style={{ width: 40, height: 40, borderRadius: '50%', background: hov ? GOLD : `${NAV_C}08`, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.25s', flexShrink: 0 }}>
+                <ArrowRight style={{ width: 18, height: 18, color: hov ? MIDNIGHT : NAV_C, transition: 'color 0.25s' }} />
+            </div>
+        </Link>
+    )
+}
+
+export default function ServicePageTemplate({ data }: { data: ServiceData }) {
+    return (
+        <div style={{ background: WHITE, minHeight: '100vh' }}>
+            <PageNavigation />
+            <PageHero
+                title={data.title}
+                subtitle={`Expert guidance and personalised strategies for ${data.title.toLowerCase()} — built around your goals.`}
+                breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Services', href: '#' }, { label: data.title, href: '#' }]}
+            />
+
+            {/* 1. INTRODUCTION */}
+            <section style={{ background: WHITE, padding: '96px 0' }}>
+                <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }} className="sk-spt-2col">
+                        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+                            <p style={{ color: GOLD, fontWeight: 700, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>Overview</p>
+                            <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 42, fontWeight: 700, color: NAV_C, marginBottom: 28, lineHeight: 1.15 }}>
+                                Understanding<br />{data.title}
                             </h2>
-                            {data.introText.map((paragraph, idx) => (
-                                <p key={idx} className="text-muted-foreground leading-relaxed text-lg text-balance">
-                                    {paragraph}
-                                </p>
-                            ))}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+                                {data.introText.map((paragraph, idx) => (
+                                    <p key={idx} style={{ color: BODY, fontSize: 16, lineHeight: 1.85 }}>{paragraph}</p>
+                                ))}
+                            </div>
+                            <Link
+                                href="/contact-us"
+                                style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginTop: 36, padding: '14px 32px', borderRadius: 999, background: MIDNIGHT, color: WHITE, fontSize: 15, fontWeight: 700, textDecoration: 'none', boxShadow: '0 8px 24px rgba(0,31,62,0.2)', fontFamily: 'var(--font-dm-sans)' }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = NAV_C }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = MIDNIGHT }}
+                            >
+                                Talk to an Advisor <ChevronRight style={{ width: 18, height: 18 }} />
+                            </Link>
                         </motion.div>
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            className="relative aspect-video lg:aspect-square bg-muted rounded-3xl overflow-hidden border border-border flex items-center justify-center p-12 text-center text-muted-foreground"
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5"></div>
-                            <span className="relative z-10 font-medium">Visual Presentation for {data.title}</span>
-                            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-accent/20 rounded-full blur-3xl"></div>
+
+                        <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+                            style={{ background: LIGHT, borderRadius: 28, border: '1px solid rgba(7,51,88,0.08)', aspectRatio: '4/3', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 48, position: 'relative', overflow: 'hidden' }}>
+                            <div style={{ position: 'absolute', top: -60, right: -60, width: 240, height: 240, borderRadius: '50%', background: `${GOLD}12`, pointerEvents: 'none' }} />
+                            <div style={{ position: 'absolute', bottom: -40, left: -40, width: 180, height: 180, borderRadius: '50%', background: `${EMERALD}10`, pointerEvents: 'none' }} />
+                            <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+                                <div style={{ width: 100, height: 100, background: WHITE, borderRadius: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', boxShadow: '0 8px 32px rgba(7,51,88,0.12)', border: '1px solid rgba(7,51,88,0.08)' }}>
+                                    <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: 44, fontWeight: 800, color: GOLD }}>{data.title.charAt(0)}</span>
+                                </div>
+                                <span style={{ fontWeight: 700, fontSize: 14, color: BODY, textTransform: 'uppercase', letterSpacing: '0.15em' }}>{data.title}</span>
+                                <p style={{ color: BODY, fontSize: 13, marginTop: 8, opacity: 0.7 }}>SK Financial Services</p>
+                            </div>
                         </motion.div>
                     </div>
                 </div>
             </section>
 
-            {/* 3. Key Features / Benefits */}
-            <section className="py-24 bg-primary/5">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="mb-16">
-                        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-                            Key Benefits
-                        </p>
-                        <h2 className="font-serif text-3xl font-bold text-foreground text-balance">
-                            Why this matters
-                        </h2>
+            {/* 2. KEY FEATURES */}
+            <section style={{ background: LIGHT, padding: '96px 0' }}>
+                <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+                    <div style={{ textAlign: 'center', marginBottom: 60 }}>
+                        <p style={{ color: GOLD, fontWeight: 700, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>Key Benefits</p>
+                        <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 44, fontWeight: 700, color: NAV_C, marginBottom: 16 }}>Why This Matters</h2>
+                        <p style={{ color: BODY, fontSize: 16, maxWidth: 500, margin: '0 auto' }}>Each feature is designed to deliver measurable impact on your financial outcomes.</p>
                     </div>
-                    <motion.div
-                        variants={staggerContainer}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-                    >
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }} className="sk-spt-3col">
                         {data.features.map((feature, idx) => (
-                            <motion.div key={idx} variants={staggerItem}>
-                                <Card className="h-full bg-card border-border hover:border-accent/30 transition-colors shadow-sm cursor-default">
-                                    <CardHeader>
-                                        <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mb-4">
-                                            <feature.icon className="w-6 h-6 text-primary" />
-                                        </div>
-                                        <CardTitle className="font-serif text-xl">{feature.title}</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <CardDescription className="text-base text-muted-foreground leading-relaxed">
-                                            {feature.desc}
-                                        </CardDescription>
-                                    </CardContent>
-                                </Card>
+                            <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.08 }}>
+                                <FeatureCard feature={feature} />
                             </motion.div>
                         ))}
-                    </motion.div>
+                    </div>
                 </div>
             </section>
 
-            {/* 4. How It Works */}
-            <section className="py-24 bg-background">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="text-center mb-20">
-                        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-                            The Process
-                        </p>
-                        <h2 className="font-serif text-3xl font-bold text-foreground text-balance">
-                            How It Works
-                        </h2>
+            {/* 3. HOW IT WORKS */}
+            <section style={{ background: WHITE, padding: '96px 0' }}>
+                <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+                    <div style={{ textAlign: 'center', marginBottom: 72 }}>
+                        <p style={{ color: GOLD, fontWeight: 700, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>The Process</p>
+                        <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 44, fontWeight: 700, color: NAV_C }}>How It Works</h2>
                     </div>
-                    <div className="grid md:grid-cols-3 gap-12 relative">
-                        {/* Connecting line for desktop */}
-                        <div className="hidden md:block absolute top-10 left-[16%] right-[16%] h-px bg-border z-0"></div>
-
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 48, position: 'relative' }} className="sk-spt-3col">
+                        {/* Connector line */}
+                        <div style={{ display: 'none', position: 'absolute', top: 40, left: '16%', right: '16%', height: 1, background: 'rgba(7,51,88,0.1)', zIndex: 0 }} className="sk-connector" />
                         {data.howItWorks.map((step, idx) => (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: idx * 0.2 }}
-                                className="relative z-10 flex flex-col items-center text-center"
-                            >
-                                <div className="w-20 h-20 rounded-2xl bg-card border border-border shadow-sm flex items-center justify-center mb-6 relative">
-                                    <step.icon className="w-8 h-8 text-primary" />
-                                    <div className="absolute -top-3 -right-3 w-7 h-7 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center text-sm">
+                            <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.2 }}
+                                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+                                <div style={{ width: 80, height: 80, borderRadius: 20, background: LIGHT, border: '1px solid rgba(7,51,88,0.1)', boxShadow: '0 4px 16px rgba(7,51,88,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24, position: 'relative' }}>
+                                    <step.icon style={{ width: 32, height: 32, color: NAV_C }} />
+                                    <div style={{ position: 'absolute', top: -12, right: -12, width: 28, height: 28, borderRadius: '50%', background: GOLD, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800, color: MIDNIGHT }}>
                                         {step.step}
                                     </div>
                                 </div>
-                                <h3 className="text-xl font-bold text-foreground mb-3 font-serif">{step.title}</h3>
-                                <p className="text-muted-foreground leading-relaxed">{step.desc}</p>
+                                <h3 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 22, fontWeight: 700, color: NAV_C, marginBottom: 12 }}>{step.title}</h3>
+                                <p style={{ color: BODY, fontSize: 15, lineHeight: 1.75 }}>{step.desc}</p>
                             </motion.div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* 5. Why Choose Us */}
-            <section className="py-24 bg-primary text-primary-foreground border-t border-primary-foreground/10">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="mb-16">
-                        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-                            Why Choose SK Financial Services
-                        </p>
-                        <h2 className="font-serif text-3xl font-bold text-primary-foreground">
-                            Expertise you can trust
-                        </h2>
+            {/* 4. WHY CHOOSE US */}
+            <section style={{ background: MIDNIGHT, padding: '96px 0', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+                <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+                    <div style={{ marginBottom: 60 }}>
+                        <p style={{ color: GOLD, fontWeight: 700, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>Why Choose SK Financial Services</p>
+                        <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 44, fontWeight: 700, color: WHITE }}>Expertise You Can Trust</h2>
                     </div>
-                    <div className="grid md:grid-cols-3 gap-8">
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }} className="sk-spt-3col">
                         {data.whyChooseUs.map((reason, idx) => (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: idx * 0.15 }}
-                                className="bg-primary-foreground/5 p-8 rounded-2xl border border-primary-foreground/10"
-                            >
-                                <div className="flex flex-col gap-4 mb-4">
-                                    <CheckCircle2 className="w-8 h-8 text-accent shrink-0" />
-                                    <h3 className="text-xl font-bold font-serif leading-tight">{reason.title}</h3>
-                                </div>
-                                <p className="text-primary-foreground/70 leading-relaxed text-sm">{reason.desc}</p>
-                            </motion.div>
+                            <WhyCard key={idx} reason={reason} delay={idx * 0.15} />
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* 6. CTA Strip */}
-            <section className="py-20 bg-accent relative overflow-hidden">
-                <div className="container mx-auto px-6 max-w-7xl relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-                    <div>
-                        <h2 className="font-serif text-3xl font-bold text-accent-foreground mb-3">Ready to secure your financial future?</h2>
-                        <p className="text-accent-foreground/80 font-medium text-lg">Talk to our experts today and get a personalized strategy.</p>
+            {/* 5. STATS BAR */}
+            <section style={{ background: NAV_C, padding: '56px 0' }}>
+                <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0 }} className="sk-spt-metrics">
+                        {[
+                            { value: '19+', label: 'Years of Experience' },
+                            { value: '1,000+', label: 'Satisfied Clients' },
+                            { value: '₹200 Cr+', label: 'Assets Under Advisory' },
+                            { value: '100%', label: 'Client-First Approach' },
+                        ].map((stat, i) => (
+                            <div key={i} style={{ textAlign: 'center', padding: '0 24px', borderRight: i < 3 ? '1px solid rgba(255,255,255,0.12)' : 'none' }}>
+                                <div style={{ fontFamily: 'var(--font-cormorant)', fontSize: 40, fontWeight: 800, color: GOLD, lineHeight: 1 }}>{stat.value}</div>
+                                <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 600, marginTop: 8, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{stat.label}</div>
+                            </div>
+                        ))}
                     </div>
-                    <Button
-                        asChild
-                        size="lg"
-                        className="bg-accent-foreground text-accent px-10 h-16 rounded-full font-bold text-lg hover:bg-accent-foreground/90 transition-all shadow-md"
-                    >
-                        <Link href="/contact-us">
-                            Get a Free Consultation
-                        </Link>
-                    </Button>
                 </div>
             </section>
 
-            {/* 7. Related Services */}
-            <section className="py-24 bg-background">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <CTABanner />
+
+            {/* 6. RELATED SERVICES */}
+            <section style={{ background: WHITE, padding: '80px 0' }}>
+                <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 48, flexWrap: 'wrap', gap: 16 }}>
                         <div>
-                            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-                                Discover More
-                            </p>
-                            <h2 className="font-serif text-3xl font-bold text-foreground">Explore Related Services</h2>
+                            <p style={{ color: GOLD, fontWeight: 700, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>Discover More</p>
+                            <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 40, fontWeight: 700, color: NAV_C }}>Explore Related Services</h2>
                         </div>
-                        <Link href="/#services" className="text-primary font-bold hover:text-accent transition-colors flex items-center gap-2">
-                            View All <ArrowRight className="w-4 h-4" />
+                        <Link href="/#services" style={{ display: 'flex', alignItems: 'center', gap: 8, color: BODY, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}
+                            onMouseEnter={e => (e.currentTarget.style.color = NAV_C)} onMouseLeave={e => (e.currentTarget.style.color = BODY)}>
+                            View All <ArrowRight style={{ width: 16, height: 16 }} />
                         </Link>
                     </div>
-                    <div className="grid md:grid-cols-3 gap-6">
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }} className="sk-spt-3col">
                         {data.relatedServices.map((service, idx) => (
-                            <Link
-                                key={idx}
-                                href={service.href}
-                                className="group bg-card p-6 rounded-2xl shadow-sm border border-border hover:border-accent hover:shadow-md transition-all duration-300 flex items-center justify-between"
-                            >
-                                <span className="font-bold text-foreground font-serif text-lg group-hover:text-primary transition-colors">{service.name}</span>
-                                <div className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center group-hover:bg-accent transition-colors">
-                                    <ArrowRight className="w-5 h-5 text-primary group-hover:text-accent-foreground shrink-0 transition-colors" />
-                                </div>
-                            </Link>
+                            <RelatedCard key={idx} service={service} />
                         ))}
                     </div>
                 </div>
             </section>
+
+            <PageFooter />
+
+            <style suppressHydrationWarning>{`
+                @media (min-width: 901px) { .sk-connector { display: block !important; } }
+                @media (max-width: 900px) {
+                    .sk-spt-2col { grid-template-columns: 1fr !important; gap: 40px !important; }
+                    .sk-spt-3col { grid-template-columns: 1fr 1fr !important; }
+                    .sk-spt-metrics { grid-template-columns: 1fr 1fr !important; gap: 32px !important; row-gap: 32px !important; }
+                }
+                @media (max-width: 600px) {
+                    .sk-spt-3col { grid-template-columns: 1fr !important; }
+                    .sk-spt-metrics { grid-template-columns: 1fr 1fr !important; }
+                }
+            `}</style>
         </div>
     )
 }

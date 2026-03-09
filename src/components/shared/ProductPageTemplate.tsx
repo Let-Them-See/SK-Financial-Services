@@ -1,10 +1,17 @@
-'use client'
+﻿'use client'
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { ChevronRight, Check } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { useState } from 'react'
+
+const NAV_C = '#073358'
+const GOLD = '#FFD716'
+const EMERALD = '#0DA574'
+const LIGHT = '#F4F7FA'
+const BODY = '#4A6080'
+const WHITE = '#FFFFFF'
+const MIDNIGHT = '#001F3E'
 
 export interface ProductData {
     title: string
@@ -13,109 +20,94 @@ export interface ProductData {
     highlights: { title: string; desc: string; icon: any }[]
     benefits: { title: string; desc: string; icon: any }[]
     whoShouldInvest: string[]
-    riskLevel: number // 1 to 5
-    returnPotential: number // 1 to 5
+    riskLevel: number
+    returnPotential: number
+}
+
+function CTAButton({ href, children, variant = 'gold' }: { href: string; children: React.ReactNode; variant?: 'gold' | 'outline' }) {
+    const [hov, setHov] = useState(false)
+    const base: React.CSSProperties = { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '14px 40px', borderRadius: 999, fontSize: 16, fontWeight: 700, cursor: 'pointer', transition: 'all 0.25s', textDecoration: 'none', border: '2px solid transparent', fontFamily: 'var(--font-dm-sans)' }
+    const gold: React.CSSProperties = { background: hov ? '#e6c200' : GOLD, color: MIDNIGHT, boxShadow: hov ? '0 8px 32px rgba(255,215,22,0.4)' : '0 4px 16px rgba(255,215,22,0.25)', transform: hov ? 'translateY(-1px)' : 'none' }
+    const outline: React.CSSProperties = { background: hov ? GOLD : 'transparent', color: hov ? MIDNIGHT : GOLD, borderColor: GOLD }
+    return (
+        <Link href={href} style={{ ...base, ...(variant === 'gold' ? gold : outline) }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
+            {children}
+        </Link>
+    )
+}
+
+function HighlightCard({ highlight }: { highlight: { title: string; desc: string; icon: any } }) {
+    const [hov, setHov] = useState(false)
+    return (
+        <div
+            onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+            style={{ background: WHITE, border: `1px solid ${hov ? `${GOLD}60` : 'rgba(7,51,88,0.1)'}`, borderRadius: 20, padding: '28px 24px', height: '100%', transition: 'all 0.25s', boxShadow: hov ? '0 8px 32px rgba(7,51,88,0.1)' : '0 2px 8px rgba(7,51,88,0.04)' }}
+        >
+            {highlight.icon && (
+                <div style={{ width: 48, height: 48, borderRadius: 12, background: `${NAV_C}08`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                    <highlight.icon style={{ width: 24, height: 24, color: NAV_C }} />
+                </div>
+            )}
+            <h3 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 20, fontWeight: 700, color: NAV_C, marginBottom: 10 }}>{highlight.title}</h3>
+            <p style={{ color: BODY, fontSize: 15, lineHeight: 1.7 }}>{highlight.desc}</p>
+        </div>
+    )
 }
 
 export default function ProductPageTemplate({ data }: { data: ProductData }) {
-    const container = {
-        hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
-    }
-
-    const item = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
-    }
-
     return (
-        <div className="bg-background min-h-screen">
-            {/* 1. Hero Banner */}
-            <section className="bg-primary py-24 lg:py-32 pt-36 relative overflow-hidden">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div className="container relative z-10 mx-auto px-6 max-w-7xl text-center flex flex-col items-center">
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="flex items-center gap-2 text-xs font-semibold text-primary-foreground/60 uppercase tracking-widest mb-6"
-                    >
-                        <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-                        <ChevronRight className="w-3 h-3 text-accent" />
-                        <span className="text-accent">Products</span>
-                        <ChevronRight className="w-3 h-3 text-accent" />
-                        <span className="text-primary-foreground">{data.title}</span>
+        <div style={{ background: WHITE, minHeight: '100vh' }}>
+            {/* 1. HERO BANNER */}
+            <section style={{ background: MIDNIGHT, paddingTop: 140, paddingBottom: 96, position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 800, height: 800, borderRadius: '50%', background: `${GOLD}08`, pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} />
+                <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 24 }}>
+                        <Link href="/" style={{ color: 'rgba(255,255,255,0.5)', textDecoration: 'none', transition: 'color 0.2s' }}
+                            onMouseEnter={e => (e.currentTarget.style.color = GOLD)} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.5)')}>Home</Link>
+                        <ChevronRight style={{ width: 12, height: 12, color: GOLD }} />
+                        <span style={{ color: GOLD }}>Products</span>
+                        <ChevronRight style={{ width: 12, height: 12, color: GOLD }} />
+                        <span style={{ color: WHITE }}>{data.title}</span>
                     </motion.div>
 
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="font-serif text-4xl font-bold leading-tight text-primary-foreground md:text-5xl lg:text-7xl text-balance max-w-4xl mb-6"
-                    >
+                    <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                        style={{ fontFamily: 'var(--font-cormorant)', fontSize: 'clamp(40px, 7vw, 76px)', fontWeight: 800, color: WHITE, lineHeight: 1.1, marginBottom: 24, maxWidth: 900 }}>
                         {data.title}
                     </motion.h1>
 
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="text-primary-foreground/80 text-lg md:text-xl font-medium max-w-2xl mb-12 text-balance leading-relaxed"
-                    >
+                    <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+                        style={{ color: 'rgba(255,255,255,0.75)', fontSize: 20, maxWidth: 640, lineHeight: 1.7, marginBottom: 44 }}>
                         {data.tagline}
                     </motion.p>
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                    >
-                        <Button
-                            asChild
-                            size="lg"
-                            className="bg-accent text-accent-foreground px-10 h-14 rounded-full font-bold text-lg hover:bg-accent/90 transition-all shadow-md"
-                        >
-                            <Link href="/contact-us">
-                                Start Investing Today
-                            </Link>
-                        </Button>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                        <CTAButton href="/contact-us">Start Investing Today</CTAButton>
                     </motion.div>
                 </div>
             </section>
 
-            {/* 2. What Is It? */}
-            <section className="py-24 bg-background">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="grid lg:grid-cols-2 gap-16 items-center">
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="relative aspect-video bg-muted rounded-3xl overflow-hidden border border-border flex items-center justify-center p-8"
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent"></div>
-                            <div className="text-center">
-                                <div className="w-24 h-24 bg-card rounded-2xl flex items-center justify-center shadow-sm mx-auto mb-6 border border-border">
-                                    <span className="text-4xl font-serif font-bold text-primary">{data.title.charAt(0)}</span>
+            {/* 2. WHAT IS IT */}
+            <section style={{ background: WHITE, padding: '96px 0' }}>
+                <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }} className="sk-ppt-2col">
+                        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+                            style={{ background: LIGHT, borderRadius: 24, border: '1px solid rgba(7,51,88,0.08)', aspectRatio: '16/9', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40, position: 'relative', overflow: 'hidden' }}>
+                            <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(135deg, ${NAV_C}08, transparent)` }} />
+                            <div style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
+                                <div style={{ width: 96, height: 96, background: WHITE, borderRadius: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', boxShadow: '0 4px 20px rgba(7,51,88,0.1)', border: '1px solid rgba(7,51,88,0.08)' }}>
+                                    <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: 40, fontWeight: 800, color: NAV_C }}>{data.title.charAt(0)}</span>
                                 </div>
-                                <span className="text-primary font-bold tracking-widest uppercase text-sm opacity-60">{data.title}</span>
+                                <span style={{ fontWeight: 700, fontSize: 13, color: BODY, textTransform: 'uppercase', letterSpacing: '0.2em' }}>{data.title}</span>
                             </div>
                         </motion.div>
 
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                        >
-                            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-                                Overview
-                            </p>
-                            <h2 className="font-serif text-3xl font-bold text-foreground mb-6 text-balance">
-                                What are {data.title}?
-                            </h2>
-                            <div className="space-y-4">
+                        <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+                            <p style={{ color: GOLD, fontWeight: 700, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>Overview</p>
+                            <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 40, fontWeight: 700, color: NAV_C, marginBottom: 28 }}>What are {data.title}?</h2>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                                 {data.whatIsIt.map((paragraph, idx) => (
-                                    <p key={idx} className="text-muted-foreground leading-relaxed text-lg text-balance">
-                                        {paragraph}
-                                    </p>
+                                    <p key={idx} style={{ color: BODY, fontSize: 16, lineHeight: 1.8 }}>{paragraph}</p>
                                 ))}
                             </div>
                         </motion.div>
@@ -123,95 +115,70 @@ export default function ProductPageTemplate({ data }: { data: ProductData }) {
                 </div>
             </section>
 
-            {/* 3. Metrics / Rating */}
-            <section className="bg-primary/5 py-16 border-y border-border">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 divide-x divide-border">
-                        <div className="text-center px-4">
-                            <span className="block text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Category</span>
-                            <span className="font-bold text-primary font-serif text-xl">{data.title}</span>
-                        </div>
-                        <div className="text-center px-4">
-                            <span className="block text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Risk Level</span>
-                            <div className="flex justify-center gap-1">
-                                {[1, 2, 3, 4, 5].map(star => (
-                                    <div key={star} className={`w-3 md:w-4 h-3 md:h-4 rounded-full ${star <= data.riskLevel ? 'bg-destructive' : 'bg-destructive/20'}`}></div>
-                                ))}
+            {/* 3. METRICS BAR */}
+            <section style={{ background: LIGHT, padding: '56px 0', borderTop: '1px solid rgba(7,51,88,0.08)', borderBottom: '1px solid rgba(7,51,88,0.08)' }}>
+                <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0 }} className="sk-ppt-metrics">
+                        {[
+                            { label: 'Category', content: <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: 20, fontWeight: 700, color: NAV_C }}>{data.title}</span> },
+                            { label: 'Risk Level', content: (
+                                <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
+                                    {[1,2,3,4,5].map(s => <div key={s} style={{ width: 14, height: 14, borderRadius: '50%', background: s <= data.riskLevel ? '#dc2626' : 'rgba(220,38,38,0.15)' }} />)}
+                                </div>
+                            )},
+                            { label: 'Return Potential', content: (
+                                <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
+                                    {[1,2,3,4,5].map(s => <div key={s} style={{ width: 14, height: 14, borderRadius: '50%', background: s <= data.returnPotential ? EMERALD : `${EMERALD}25` }} />)}
+                                </div>
+                            )},
+                            { label: 'Free Consultation', content: <span style={{ fontFamily: 'var(--font-cormorant)', fontSize: 20, fontWeight: 700, color: GOLD }}>Available</span> },
+                        ].map((m, i) => (
+                            <div key={i} style={{ textAlign: 'center', padding: '0 24px', borderRight: i < 3 ? '1px solid rgba(7,51,88,0.1)' : 'none' }}>
+                                <span style={{ display: 'block', fontSize: 11, fontWeight: 700, color: BODY, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12 }}>{m.label}</span>
+                                {m.content}
                             </div>
-                        </div>
-                        <div className="text-center px-4">
-                            <span className="block text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Return Potential</span>
-                            <div className="flex justify-center gap-1">
-                                {[1, 2, 3, 4, 5].map(star => (
-                                    <div key={star} className={`w-3 md:w-4 h-3 md:h-4 rounded-full hover:scale-110 transition-transform ${star <= data.returnPotential ? 'bg-[hsl(142.1,76.2%,36.3%)]' : 'bg-[hsl(142.1,76.2%,36.3%)]/20'}`}></div>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="text-center px-4">
-                            <span className="block text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Consultation</span>
-                            <span className="font-bold text-accent font-serif text-xl">Available</span>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </section>
 
-            {/* 4. Highlights Grid */}
-            <section className="py-24 bg-background">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="text-center mb-16">
-                        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-                            Important Details
-                        </p>
-                        <h2 className="font-serif text-3xl font-bold text-foreground">Key Highlights</h2>
+            {/* 4. HIGHLIGHTS GRID */}
+            <section style={{ background: WHITE, padding: '96px 0' }}>
+                <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+                    <div style={{ textAlign: 'center', marginBottom: 60 }}>
+                        <p style={{ color: GOLD, fontWeight: 700, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>Important Details</p>
+                        <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 44, fontWeight: 700, color: NAV_C }}>Key Highlights</h2>
                     </div>
-                    <motion.div
-                        variants={container}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                        className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-                    >
+                    <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ staggerChildren: 0.1 }}
+                        style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }} className="sk-ppt-highlights">
                         {data.highlights.map((highlight, idx) => (
-                            <motion.div key={idx} variants={item}>
-                                <Card className="bg-card border-border h-full shadow-sm hover:border-accent/30 transition-colors">
-                                    <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-                                        <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
-                                            <highlight.icon className="w-6 h-6 text-primary" />
-                                        </div>
-                                        <CardTitle className="font-serif text-lg m-0">{highlight.title}</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <CardDescription className="text-base text-muted-foreground">
-                                            {highlight.desc}
-                                        </CardDescription>
-                                    </CardContent>
-                                </Card>
+                            <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.08 }}>
+                                <HighlightCard highlight={highlight} />
                             </motion.div>
                         ))}
                     </motion.div>
                 </div>
             </section>
 
-            {/* 5. Benefits & Target Audience */}
-            <section className="py-24 bg-primary text-primary-foreground border-y border-primary-foreground/10">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="grid lg:grid-cols-2 gap-16">
-
-                        {/* Benefits list */}
+            {/* 5. BENEFITS & WHO SHOULD INVEST */}
+            <section style={{ background: MIDNIGHT, padding: '96px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80 }} className="sk-ppt-2col">
+                        {/* Benefits */}
                         <div>
-                            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-                                The Advantage
-                            </p>
-                            <h2 className="font-serif text-3xl font-bold text-primary-foreground mb-8">Benefits of {data.title}</h2>
-                            <div className="space-y-6">
+                            <p style={{ color: GOLD, fontWeight: 700, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>The Advantage</p>
+                            <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 40, fontWeight: 700, color: WHITE, marginBottom: 40 }}>Benefits of {data.title}</h2>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
                                 {data.benefits.map((benefit, idx) => (
-                                    <div key={idx} className="flex items-start gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center shrink-0 shadow-sm mt-1">
-                                            <benefit.icon className="w-5 h-5" />
-                                        </div>
+                                    <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+                                        {benefit.icon && (
+                                            <div style={{ width: 44, height: 44, borderRadius: '50%', background: `${GOLD}20`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
+                                                <benefit.icon style={{ width: 20, height: 20, color: GOLD }} />
+                                            </div>
+                                        )}
                                         <div>
-                                            <h3 className="font-bold text-lg font-serif mb-1">{benefit.title}</h3>
-                                            <p className="text-primary-foreground/70 leading-relaxed text-sm">{benefit.desc}</p>
+                                            <h3 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 20, fontWeight: 700, color: WHITE, marginBottom: 6 }}>{benefit.title}</h3>
+                                            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 14, lineHeight: 1.75 }}>{benefit.desc}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -219,33 +186,36 @@ export default function ProductPageTemplate({ data }: { data: ProductData }) {
                         </div>
 
                         {/* Who should invest */}
-                        <div className="bg-primary-foreground/5 rounded-3xl p-10 border border-primary-foreground/10 h-fit">
-                            <h2 className="font-serif text-2xl font-bold text-primary-foreground mb-8 border-b border-primary-foreground/10 pb-4">Who should invest?</h2>
-                            <ul className="space-y-4">
+                        <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 28, padding: 44, border: '1px solid rgba(255,255,255,0.08)', alignSelf: 'flex-start' }}>
+                            <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: 30, fontWeight: 700, color: WHITE, marginBottom: 28, paddingBottom: 20, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>Who Should Invest?</h2>
+                            <ul style={{ display: 'flex', flexDirection: 'column', gap: 16, listStyle: 'none', padding: 0, margin: 0 }}>
                                 {data.whoShouldInvest.map((point, idx) => (
-                                    <li key={idx} className="flex items-start gap-3">
-                                        <Check className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                                        <span className="text-primary-foreground/80 leading-relaxed">{point}</span>
+                                    <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                                        <Check style={{ width: 18, height: 18, color: EMERALD, flexShrink: 0, marginTop: 2 }} />
+                                        <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: 15, lineHeight: 1.7 }}>{point}</span>
                                     </li>
                                 ))}
                             </ul>
-                            <div className="mt-10 pt-6 border-t border-primary-foreground/10 text-center">
-                                <p className="text-sm font-semibold text-primary-foreground/70 mb-4">Does this sound like you?</p>
-                                <Button
-                                    asChild
-                                    variant="outline"
-                                    className="border-accent text-accent hover:bg-accent hover:text-accent-foreground rounded-full h-12 px-8 w-full"
-                                >
-                                    <Link href="/contact-us">
-                                        Speak to an Advisor
-                                    </Link>
-                                </Button>
+                            <div style={{ marginTop: 36, paddingTop: 28, borderTop: '1px solid rgba(255,255,255,0.08)', textAlign: 'center' }}>
+                                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, fontWeight: 600, marginBottom: 16 }}>Does this sound like you?</p>
+                                <CTAButton href="/contact-us" variant="outline">Speak to an Advisor</CTAButton>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>
+
+            <style suppressHydrationWarning>{`
+                @media (max-width: 900px) {
+                    .sk-ppt-2col { grid-template-columns: 1fr !important; gap: 40px !important; }
+                    .sk-ppt-highlights { grid-template-columns: 1fr 1fr !important; }
+                    .sk-ppt-metrics { grid-template-columns: 1fr 1fr !important; gap: 24px !important; }
+                }
+                @media (max-width: 600px) {
+                    .sk-ppt-highlights { grid-template-columns: 1fr !important; }
+                    .sk-ppt-metrics { grid-template-columns: 1fr !important; }
+                }
+            `}</style>
         </div>
     )
 }

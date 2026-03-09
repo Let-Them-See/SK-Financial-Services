@@ -1,21 +1,21 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@layer base {
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; background: #001F3E; }
-    body {
-        background: #001F3E;
-        color: #FFFFFF;
-        font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-    ::selection { background: #FFD716; color: #001F3E; }
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: #001F3E; }
-    ::-webkit-scrollbar-thumb { background: #FFD716; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #E6C200; }
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: #001F3E; }
+body {
+  background: #001F3E;
+  color: #FFFFFF;
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+::selection { background: #FFD716; color: #001F3E; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #001F3E; }
+::-webkit-scrollbar-thumb { background: #FFD716; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #E6C200; }
 
 @keyframes shimmer {
     0% { background-position: 0% center; }

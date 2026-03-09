@@ -95,7 +95,7 @@ export default function Hero() {
         </div>
       </div>
       {/* Responsive styles */}
-      <style>{`
+      <style suppressHydrationWarning>{`
         @media (max-width: 1024px) {
           .glass { display: none !important; }
           .dot-pattern { background-size: 24px 24px !important; }
