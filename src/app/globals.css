@@ -28,28 +28,52 @@
         --radius: 0.5rem;
     }
 
-    .dark {
-        --background: 210 100% 7%;
-        /* Dark Navy #001122 */
-        --foreground: 0 0% 98%;
-        --card: 210 100% 7%;
-        --card-foreground: 0 0% 98%;
-        --popover: 210 100% 7%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 210 100% 13%;
-        --secondary: 210 100% 13%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 210 100% 13%;
-        --muted-foreground: 215 20.2% 65.1%;
-        --accent: 210 100% 13%;
-        --accent-foreground: 0 0% 98%;
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 210 100% 13%;
-        --input: 210 100% 13%;
-        --ring: 212.7 26.8% 83.9%;
-    }
+        .dark {
+            --background: #001F3E;
+            --foreground: #FFFFFF;
+            --card: #073358;
+            --card-foreground: #FFFFFF;
+            --popover: #073358;
+            --popover-foreground: #FFFFFF;
+            --primary: #FFFFFF;
+            --primary-foreground: #FFD716;
+            --secondary: #F8F9FA;
+            --secondary-foreground: #073358;
+            --muted: #F8F9FA;
+            --muted-foreground: #0DA574;
+            --accent: #FFD716;
+            --accent-foreground: #073358;
+            --destructive: #FF4C4C;
+            --destructive-foreground: #FFFFFF;
+            --border: #F8F9FA;
+            --input: #F8F9FA;
+            --ring: #FFD716;
+        }
+html {
+    background: #001F3E;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    background: #001F3E;
+}
+::-webkit-scrollbar-thumb {
+    background: #FFD716;
+    border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #0DA574;
+}
+
+::selection {
+    background: #FFD716;
+    color: #001F3E;
+}
 }
 
 @layer base {
