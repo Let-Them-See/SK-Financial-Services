@@ -2,60 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-    :root {
-        --background: 0 0% 100%;
-        --foreground: 210 100% 13%;
-        --card: 0 0% 100%;
-        --card-foreground: 210 100% 13%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 210 100% 13%;
-        --primary: 210 100% 13%;
-        /* Navy #002244 */
-        --primary-foreground: 0 0% 100%;
-        --secondary: 0 0% 96%;
-        --secondary-foreground: 210 100% 13%;
-        --muted: 0 0% 96%;
-        --muted-foreground: 215 16.3% 46.9%;
-        --accent: 51 100% 50%;
-        /* Gold #FFD700 */
-        --accent-foreground: 210 100% 13%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 214.3 31.8% 91.4%;
-        --input: 214.3 31.8% 91.4%;
-        --ring: 210 100% 13%;
-        --radius: 0.5rem;
-    }
-
-        .dark {
-            --background: #001F3E;
-            --foreground: #FFFFFF;
-            --card: #073358;
-            --card-foreground: #FFFFFF;
-            --popover: #073358;
-            --popover-foreground: #FFFFFF;
-            --primary: #FFFFFF;
-            --primary-foreground: #FFD716;
-            --secondary: #F8F9FA;
-            --secondary-foreground: #073358;
-            --muted: #F8F9FA;
-            --muted-foreground: #0DA574;
-            --accent: #FFD716;
-            --accent-foreground: #073358;
-            --destructive: #FF4C4C;
-            --destructive-foreground: #FFFFFF;
-            --border: #F8F9FA;
-            --input: #F8F9FA;
-            --ring: #FFD716;
-        }
-html {
+html, body {
     background: #001F3E;
+    color: #FFFFFF;
+    font-family: 'DM Sans', 'Cormorant Garamond', sans-serif;
     scroll-behavior: smooth;
-}
-
-body {
-    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -74,14 +25,46 @@ body {
     background: #FFD716;
     color: #001F3E;
 }
+
+@keyframes shimmer {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(0px); }
+}
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-gold {
+    0% { box-shadow: 0 0 0 0 rgba(255,215,22,0.4); }
+    50% { box-shadow: 0 0 12px 0 rgba(255,215,22,0.4); }
+    100% { box-shadow: 0 0 0 0 rgba(255,215,22,0.4); }
 }
 
-@layer base {
-    * {
-        @apply border-border;
-    }
-
-    body {
-        @apply bg-background text-foreground;
-    }
+.glass {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.1);
 }
+.dot-pattern {
+    background-image: radial-gradient(circle, rgba(255,215,22,0.07) 1px, transparent 1px);
+    background-size: 36px 36px;
+}
+.text-shimmer {
+    background: linear-gradient(135deg, #FFD716, #FFF0A0, #FFD716);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+}
+        .text-shimmer {
+            background: linear-gradient(135deg, #FFD716, #FFF0A0, #FFD716);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
